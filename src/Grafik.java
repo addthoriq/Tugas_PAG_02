@@ -31,7 +31,6 @@ public class Grafik extends JFrame implements ActionListener {
         c.setBounds(222, 30, 275, 272);
         c.setBackground(Color.white);
         c.setVisible(true);
-        c.setFocusable(false);
         
 
         String[] namaBulan = { "Januari", "Februari", "Maret", "April", "Mei", "Juni" };
@@ -178,31 +177,6 @@ public class Grafik extends JFrame implements ActionListener {
 
     int minValue = 0, maxValue = 0;
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-        Graphics g = c.getGraphics();
-        if (source == btn_bar){
-            int ja = Integer.parseInt(tx_Jan.getText());
-            int fe = Integer.parseInt(tx_Feb.getText());
-            int mr = Integer.parseInt(tx_Mar.getText());
-            int ap = Integer.parseInt(tx_Apr.getText());
-            int me = Integer.parseInt(tx_Mei.getText());
-            int jn = Integer.parseInt(tx_Jun.getText());
-            setValue(ja, fe, mr, ap, me, jn);
-            getBar(g);
-        } else if (source == btn_line){
-            System.exit(0);
-        } else if (source == btn_pie){
-            System.exit(0);
-        } else {
-            g.setColor(Color.WHITE);
-            g.fillRect(0, 0, c.getWidth(), c.getHeight());
-            this.maxValue = 0;
-            this.minValue = 0;
-        }
-    }
-
     public void getMaxMin() {
         for (int i = 0; i < this.arrValue.length; i++) {
             if (this.minValue > this.arrValue[i])
@@ -216,21 +190,9 @@ public class Grafik extends JFrame implements ActionListener {
         return this.maxValue / 2;
     }
 
-    public void getBar(Graphics g){
-        getMaxMin();
-        getMid();
+    public void getBar(Graphics g) {
         int tepiAtas = 45;
         int tepiBawah = 240;
-        // Start Judul Atas
-        g.drawString("Grafik Penjualan 6 Bulan", 60, 25);
-        // End Judul Atas
-        /* Start Nilai Samping */
-        // Nilai Samping Max
-        g.drawString(Integer.toString(this.maxValue), (25 / 2) - 3, tepiAtas);
-        // Nilai Samping Mid
-        int nilaiMid = (tepiBawah - tepiAtas) / 2 + (this.maxValue - this.minValue);
-        g.drawString(Integer.toString(getMid()), (25 / 2) - 3, nilaiMid);
-        /* End Nilai Samping */
 
         // Start Warna Garis
         g.setColor(Color.blue);
@@ -270,6 +232,46 @@ public class Grafik extends JFrame implements ActionListener {
             g.drawString(namaBulan[index], koorX + 7, 250);
         }
         // End Bar Grafik
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+        Graphics g = c.getGraphics();
+        if (source == btn_bar){
+            int ja = Integer.parseInt(tx_Jan.getText());
+            int fe = Integer.parseInt(tx_Feb.getText());
+            int mr = Integer.parseInt(tx_Mar.getText());
+            int ap = Integer.parseInt(tx_Apr.getText());
+            int me = Integer.parseInt(tx_Mei.getText());
+            int jn = Integer.parseInt(tx_Jun.getText());
+            setValue(ja, fe, mr, ap, me, jn);
+            getMaxMin();
+            getMid();
+            g.setColor(Color.WHITE);
+            g.fillRect(0, 0, c.getWidth(), c.getHeight());
+            g.setColor(Color.BLACK);
+            // Start Judul Atas
+            g.drawString("Grafik Penjualan 6 Bulan", 60, 25);
+            // End Judul Atas
+            /* Start Nilai Samping */
+            // Nilai Samping Max
+            g.drawString(Integer.toString(this.maxValue), (25 / 2) - 3, 45);
+            // Nilai Samping Mid
+            int nilaiMid = (240 - 45) / 2 + (this.maxValue - this.minValue);
+            g.drawString(Integer.toString(getMid()), (25 / 2) - 3, nilaiMid);
+            /* End Nilai Samping */
+            getBar(g);
+        } else if (source == btn_line){
+            System.exit(0);
+        } else if (source == btn_pie){
+            System.exit(0);
+        } else {
+            g.setColor(Color.WHITE);
+            g.fillRect(0, 0, c.getWidth(), c.getHeight());
+            this.maxValue = 0;
+            this.minValue = 0;
+        }
     }
 
 
