@@ -205,14 +205,30 @@ public class Grafik extends JFrame implements ActionListener {
         // End Garis X
 
         /*
-         * Full = 192
+         * Full = 187
          * Spasi = 1
          * Koordinat Y (Atas) = 45
-         * Koordinat Y (Bawah) = 237
+         * Koordinat Y (Bawah) = 240
          */
 
         // Start Bar Grafik
         g.setColor(Color.red);
+
+        /*
+         * Example
+         * max = 20
+         * min = 2
+         * ukuran = (240 - 45) / (20 - 2) = 195 / 18 = 10
+         * tinggi = 20 * 10 = 200
+         * koorY = 45 + ((20-20) * 10) = 45 + 0 = 45
+         * 187 = (20*10) - 20 + 7
+         * 
+         * ukuran = 10
+         * tinggi = 2 * 10 + 7 = 27
+         * koorY = 45 + ((27-2) * 10) = 45 + 250 = 295
+         * 187 = (2*10) - 2 + 7 = 25
+         */
+
 
         int ukuran = (tepiBawah - tepiAtas) / (this.maxValue - this.minValue);
         int lebarBatang = 37;
@@ -220,14 +236,8 @@ public class Grafik extends JFrame implements ActionListener {
 
         for (int index = 0; index < this.arrValue.length; index++) {
             int koorX = index * lebarBatang + 27;
-            int koorY = tepiAtas;
+            int koorY = (int) ((this.maxValue - this.arrValue[index]) * ukuran) + tepiAtas;
             int tinggi = (int) (this.arrValue[index] * ukuran);
-            if (this.arrValue[index] >= 0) {
-                koorY += (int) ((this.maxValue - this.arrValue[index]) * ukuran);
-            } else {
-                koorY += (int) (this.maxValue * ukuran);
-                tinggi = -tinggi;
-            }
             g.fillRect(koorX, koorY, lebarBatang - 1, tinggi);
             g.drawString(namaBulan[index], koorX + 7, 250);
         }
@@ -258,10 +268,12 @@ public class Grafik extends JFrame implements ActionListener {
             // Nilai Samping Max
             g.drawString(Integer.toString(this.maxValue), (25 / 2) - 3, 45);
             // Nilai Samping Mid
-            int nilaiMid = (240 - 45) / 2 + (this.maxValue - this.minValue);
+            int nilaiMid = (45 /2) + (240 / 2);
             g.drawString(Integer.toString(getMid()), (25 / 2) - 3, nilaiMid);
             /* End Nilai Samping */
             getBar(g);
+            this.maxValue = 0;
+            this.minValue = 0;
         } else if (source == btn_line){
             System.exit(0);
         } else if (source == btn_pie){
